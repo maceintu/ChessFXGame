@@ -1,9 +1,6 @@
 package fr.perso.chess.backend.general;
 
-import fr.perso.chess.backend.pieces.Knight;
-import fr.perso.chess.backend.pieces.Pawn;
-import fr.perso.chess.backend.pieces.Queen;
-import fr.perso.chess.backend.pieces.Tower;
+import fr.perso.chess.backend.pieces.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,22 +18,31 @@ public class Board {
             for (int col = 0; col < 8; col++) {
                 Position pos = new Position(row, col);
                 Cell cell = new Cell(pos);
-                if(row==1 || row==2){
-                    Knight pawn = new Knight(blackPlayer, cell);
-                    cell.setPiece(pawn);
-                } else if (row == 6) {
-                    Queen pawn = new Queen(whitePlayer, cell);
-                    cell.setPiece(pawn);
-                } else if(row == 4 && col == 4){
-                    Knight knight = new Knight(whitePlayer, cell);
-                    cell.setPiece(knight);
+                if (row == 1) cell.setPiece(new Pawn(whitePlayer, cell));
+                if (row == 6) cell.setPiece(new Pawn(blackPlayer, cell));
+
+                if (row == 0 || row == 7) {
+                    Player player = (row == 0) ? whitePlayer : blackPlayer;
+                    Piece piece = createHeavyPiece(player, cell, col);
+                    if (piece != null) cell.setPiece(piece);
                 }
                 this.cellMap.put(pos, cell);
             }
         }
     }
 
-    public Cell getCellFromPreviousWithOffset(Cell cell, int offsetRow, int offsetCol){
+    private Piece createHeavyPiece(Player player, Cell cell, int col) {
+        return switch (col) {
+            case 0, 7 -> new Tower(player, cell);
+            case 1, 6 -> new Knight(player, cell);
+            case 2, 5 -> new Bishop(player, cell);
+            case 3 -> new Queen(player, cell);
+            //case 4    -> new King(player, cell);
+            default -> null;
+        };
+    }
+
+    public Cell getCellFromPreviousWithOffset(Cell cell, int offsetRow, int offsetCol) {
         int currentRow = cell.position.row();
         int currentCol = cell.position.col();
         return cellMap.get(new Position(currentRow + offsetRow, currentCol + offsetCol));
