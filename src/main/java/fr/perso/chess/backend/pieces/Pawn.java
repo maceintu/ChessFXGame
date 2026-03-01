@@ -16,8 +16,8 @@ public class Pawn extends Piece {
     public List<Cell> getLegalMoves(Board board) {
         List<Cell> legalMoves = new ArrayList<>();
 
-        int direction = this.getPlayer().isWhite() ? -1 : 1;
-        int startRow = this.getPlayer().isWhite() ? 6 : 1; //
+        int direction = this.getPlayer().isWhite() ? 1 : -1;
+        int startRow = this.getPlayer().isWhite() ? 1 : 6; //
 
         Cell forward1 = board.getCellFromPreviousWithOffset(this.cell, direction, 0);
         if (forward1 != null && forward1.getPiece() == null) {
