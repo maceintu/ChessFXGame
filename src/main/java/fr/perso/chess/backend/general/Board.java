@@ -6,14 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Board {
-    private Player whitePlayer;
-    private Player blackPlayer;
     public Map<Position, Cell> cellMap;
 
-    public Board() {
+    public Board(Player whitePlayer, Player blackPlayer) {
         this.cellMap = new HashMap<>();
-        whitePlayer = new Player(true);
-        blackPlayer = new Player(false);
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 Position pos = new Position(row, col);
