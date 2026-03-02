@@ -1,7 +1,7 @@
 package fr.perso.chess.frontend.components;
 
-import fr.perso.chess.backend.general.Board;
 import fr.perso.chess.backend.general.Cell;
+import fr.perso.chess.backend.general.GameController;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -11,12 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BoardView extends GridPane {
-
-    private final Board boardBackend;
     private final Map<Cell, CellView> viewMap = new HashMap<>();
 
-    public BoardView(Board boardBackend) {
-        this.boardBackend = boardBackend;
+    public BoardView(GameController gc) {
+
+        gc.setOnMovesAvailable(cells -> {
+            clearHints();
+            cells.forEach(this::showHintOn);
+        });
 
         // 1. Configuration des contraintes de taille (8x8)
         for (int i = 0; i < 8; i++) {
@@ -31,8 +33,8 @@ public class BoardView extends GridPane {
             this.getRowConstraints().add(row);
         }
 
-        for (Cell cell : boardBackend.cellMap.values()) {
-            CellView cellView = new CellView(cell);
+        for (Cell cell : gc.getBoard().cellMap.values()) {
+            CellView cellView = new CellView(cell, gc::onCellPressed);
 
             viewMap.put(cell, cellView);
             this.add(cellView, cell.position.col(), 7 - cell.position.row());
@@ -40,7 +42,6 @@ public class BoardView extends GridPane {
     }
 
     public void clearHints() {
-        // Grâce à la map, on accède directement à toutes les vues
         viewMap.values().forEach(cv -> cv.showDot(false));
     }
 
@@ -49,9 +50,5 @@ public class BoardView extends GridPane {
         if (cv != null) {
             cv.showDot(true);
         }
-    }
-
-    public Board getBoardBackend() {
-        return boardBackend;
     }
 }
