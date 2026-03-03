@@ -1,8 +1,7 @@
-package fr.perso.chess.frontend.components;
+package fr.perso.chess.view.components;
 
-import fr.perso.chess.backend.general.Board;
-import fr.perso.chess.backend.general.Cell;
-import fr.perso.chess.backend.pieces.Piece;
+import fr.perso.chess.model.general.Cell;
+import fr.perso.chess.model.pieces.Piece;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -11,7 +10,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 public class CellView extends StackPane {

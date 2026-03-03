@@ -1,10 +1,8 @@
-package fr.perso.chess.backend.general;
+package fr.perso.chess.model.general;
 
-import fr.perso.chess.backend.pieces.Piece;
+import fr.perso.chess.model.pieces.Piece;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-
-import java.util.Optional;
 
 public class Cell {
     Cell(Position position){

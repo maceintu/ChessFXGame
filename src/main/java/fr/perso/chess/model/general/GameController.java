@@ -1,6 +1,6 @@
-package fr.perso.chess.backend.general;
+package fr.perso.chess.model.general;
 
-import fr.perso.chess.backend.pieces.Piece;
+import fr.perso.chess.model.pieces.Piece;
 
 import java.util.List;
 import java.util.function.Consumer;

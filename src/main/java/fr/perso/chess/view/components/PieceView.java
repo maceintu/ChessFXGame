@@ -1,6 +1,6 @@
-package fr.perso.chess.frontend.components;
+package fr.perso.chess.view.components;
 
-import fr.perso.chess.backend.pieces.Piece;
+import fr.perso.chess.model.pieces.Piece;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;

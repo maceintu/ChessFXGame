@@ -1,4 +1,4 @@
-package fr.perso.chess.frontend.components;
+package fr.perso.chess.view.components;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;

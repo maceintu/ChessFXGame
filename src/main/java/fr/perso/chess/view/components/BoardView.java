@@ -1,7 +1,7 @@
-package fr.perso.chess.frontend.components;
+package fr.perso.chess.view.components;
 
-import fr.perso.chess.backend.general.Cell;
-import fr.perso.chess.backend.general.GameController;
+import fr.perso.chess.model.general.Cell;
+import fr.perso.chess.model.general.GameController;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;

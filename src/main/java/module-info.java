@@ -7,11 +7,13 @@ module fr.perso.chess {
 
     opens fr.perso.chess to javafx.fxml;
     exports fr.perso.chess;
-    exports fr.perso.chess.frontend;
-    opens fr.perso.chess.frontend to javafx.fxml;
-    exports fr.perso.chess.frontend.components;
-    opens fr.perso.chess.frontend.components to javafx.fxml;
+    exports fr.perso.chess.view;
+    opens fr.perso.chess.view to javafx.fxml;
+    exports fr.perso.chess.view.components;
+    opens fr.perso.chess.view.components to javafx.fxml;
 
-    exports fr.perso.chess.backend.pieces;
-    exports fr.perso.chess.backend.general;
+    exports fr.perso.chess.model.pieces;
+    exports fr.perso.chess.model.general;
+    exports fr.perso.chess.controller;
+    opens fr.perso.chess.controller to javafx.fxml;
 }

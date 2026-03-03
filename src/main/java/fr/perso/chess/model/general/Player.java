@@ -1,4 +1,4 @@
-package fr.perso.chess.backend.general;
+package fr.perso.chess.model.general;
 
 import java.sql.Time;
 

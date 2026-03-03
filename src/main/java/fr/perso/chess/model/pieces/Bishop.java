@@ -1,8 +1,8 @@
-package fr.perso.chess.backend.pieces;
+package fr.perso.chess.model.pieces;
 
-import fr.perso.chess.backend.general.Board;
-import fr.perso.chess.backend.general.Cell;
-import fr.perso.chess.backend.general.Player;
+import fr.perso.chess.model.general.Board;
+import fr.perso.chess.model.general.Cell;
+import fr.perso.chess.model.general.Player;
 
 import java.util.List;
 

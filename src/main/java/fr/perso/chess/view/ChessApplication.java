@@ -1,9 +1,8 @@
-package fr.perso.chess.frontend;
+package fr.perso.chess.view;
 
-import fr.perso.chess.backend.general.Board;
-import fr.perso.chess.backend.general.GameController;
-import fr.perso.chess.frontend.components.BoardView;
-import fr.perso.chess.frontend.components.SidePanel;
+import fr.perso.chess.model.general.GameController;
+import fr.perso.chess.view.components.BoardView;
+import fr.perso.chess.view.components.SidePanel;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;

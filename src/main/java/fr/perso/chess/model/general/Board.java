@@ -1,6 +1,6 @@
-package fr.perso.chess.backend.general;
+package fr.perso.chess.model.general;
 
-import fr.perso.chess.backend.pieces.*;
+import fr.perso.chess.model.pieces.*;
 
 import java.util.HashMap;
 import java.util.Map;
