@@ -7,8 +7,8 @@ import fr.perso.chess.model.general.Player;
 import java.util.List;
 
 public class Bishop extends Piece {
-    public Bishop(Player player, Cell cell) {
-        super(player, cell);
+    public Bishop(Player player) {
+        super(player);
     }
 
     @Override

@@ -7,8 +7,8 @@ import fr.perso.chess.model.general.Player;
 import java.util.List;
 
 public class Queen extends Piece {
-    public Queen(Player player, Cell cell) {
-        super(player, cell);
+    public Queen(Player player) {
+        super(player);
     }
 
     @Override

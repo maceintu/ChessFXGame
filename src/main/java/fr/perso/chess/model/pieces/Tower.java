@@ -7,8 +7,8 @@ import fr.perso.chess.model.general.Player;
 import java.util.List;
 
 public class Tower extends Piece {
-    public Tower(Player player, Cell cell) {
-        super(player, cell);
+    public Tower(Player player) {
+        super(player);
     }
 
     @Override

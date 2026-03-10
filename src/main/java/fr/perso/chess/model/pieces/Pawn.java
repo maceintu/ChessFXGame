@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pawn extends Piece {
-    public Pawn(Player player, Cell cell) {
-        super(player, cell);
+    public Pawn(Player player) {
+        super(player);
     }
 
     @Override
