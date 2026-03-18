@@ -14,9 +14,9 @@ public class Cell {
     public ObjectProperty<Piece> pieceProperty() { return pieceProperty; }
 
     public void setPiece(Piece piece) {
-        this.pieceProperty.set(piece);
-        if(piece != null)
-            piece.setPosition(this);
+//        return null;
+//        this.pieceProperty.set(piece);
     }
+
     public Piece getPiece() { return this.pieceProperty.get(); }
 }
