@@ -1,4 +1,4 @@
-package fr.perso.chess.view;
+package fr.perso.chess;
 
 import fr.perso.chess.controller.GameController;
 import fr.perso.chess.model.general.Board;

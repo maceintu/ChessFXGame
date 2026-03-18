@@ -1,6 +1,5 @@
 package fr.perso.chess;
 
-import fr.perso.chess.view.ChessApplication;
 import javafx.application.Application;
 
 public class Launcher {
