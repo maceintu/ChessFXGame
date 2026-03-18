@@ -11,10 +11,10 @@ public class Bishop extends Piece {
         super(player);
     }
 
-    @Override
-    public List<Cell> getLegalMoves(Board board) {
-        int[][] directions = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
-        return this.getLinearLegalMoves(board, directions);
-    }
+//    @Override
+//    public List<Cell> getLegalMoves(Board board) {
+//        int[][] directions = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
+//        return this.getLinearLegalMoves(board, directions);
+//    }
 }
 

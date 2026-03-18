@@ -18,11 +18,11 @@ public abstract class Piece {
         return player;
     }
 
-    public abstract List<Cell> getLegalMoves(Board board);
+//    public abstract List<Cell> getLegalMoves(Board board);
 
-    List<Cell> getLinearLegalMoves(Board board, int[][] directions) {
-        return new ArrayList<>();
-    }
+//    List<Cell> getLinearLegalMoves(Board board, int[][] directions) {
+//        return new ArrayList<>();
+//    }
 //        ArrayList<Cell> legalMoves = new ArrayList<>();
 //        for (int[] d : directions) {
 //            Cell next = this.cell;
