@@ -3,7 +3,7 @@ package fr.perso.chess.model.general;
 import java.sql.Time;
 
 public class Player {
-    Player(boolean isWhite){
+    public Player(boolean isWhite){
         this.white = isWhite;
     };
     private final boolean white;
