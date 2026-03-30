@@ -1,4 +1,4 @@
-package fr.perso.chess.view.components;
+package fr.perso.chess.view;
 
 import fr.perso.chess.model.pieces.Piece;
 import javafx.scene.layout.StackPane;

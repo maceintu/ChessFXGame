@@ -1,4 +1,4 @@
-package fr.perso.chess.view.components;
+package fr.perso.chess.view;
 
 import javafx.scene.layout.GridPane;
 

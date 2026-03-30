@@ -2,8 +2,8 @@ package fr.perso.chess.controller;
 
 import fr.perso.chess.model.general.Board;
 import fr.perso.chess.model.general.Cell;
-import fr.perso.chess.view.components.BoardView;
-import fr.perso.chess.view.components.CellView;
+import fr.perso.chess.view.BoardView;
+import fr.perso.chess.view.CellView;
 
 public class GameController {
 

@@ -9,8 +9,6 @@ module fr.perso.chess {
     exports fr.perso.chess;
     exports fr.perso.chess.view;
     opens fr.perso.chess.view to javafx.fxml;
-    exports fr.perso.chess.view.components;
-    opens fr.perso.chess.view.components to javafx.fxml;
 
     exports fr.perso.chess.model.pieces;
     exports fr.perso.chess.model.general;
