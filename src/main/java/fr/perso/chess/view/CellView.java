@@ -17,22 +17,15 @@ public class CellView extends StackPane {
 
     private final Circle dot = new Circle(10, Color.web("#000000", 0.3));
 
-    public static final double SIZE = 70.0; // Taille d'une case
+    public static final double SIZE = 50.0;
 
     public CellView(int row, int col) {
-        // 1. Définir la taille du composant
-        this.setPrefSize(SIZE, SIZE);
-        this.setMinSize(SIZE, SIZE);
-
-        // 2. Déterminer la couleur
-        Color color = (row + col) % 2 == 0 ? Color.BEIGE : Color.BROWN;
-
-        // 3. Créer un fond visuel
+        Color baseColor = (row + col) % 2 == 0 ? Color.BEIGE : Color.BROWN;
         Rectangle background = new Rectangle(SIZE, SIZE);
-        background.setFill(color);
-
-        // 4. Ajouter le fond à la vue
-        this.getChildren().add(background);
+        background.setFill(baseColor);
+        background.setStroke(Color.BLACK); // bordure fine pour chaque cellule
+        getChildren().add(background);
+        setPrefSize(SIZE, SIZE);
     }
 }
 

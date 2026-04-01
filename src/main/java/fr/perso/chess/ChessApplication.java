@@ -18,11 +18,12 @@ public class ChessApplication extends Application {
         GameController gc = new GameController(board, boardView);
         HBox.setHgrow(boardView, Priority.ALWAYS);
         HBox root = new HBox(boardView);
-        Scene scene = new Scene(root, 900, 700);
-        stage.setTitle("Échecs 2.0 - Architecture Propre");
+        Scene scene = new Scene(root, 500, 500);
+        stage.setTitle("Échecs");
+        //stage.setFullScreen(true);
         stage.setScene(scene);
-        stage.setMinWidth(600);
-        stage.setMinHeight(400);
+        stage.setMinWidth(800);
+        stage.setMinHeight(800);
         stage.show();
     }
 
