@@ -2,15 +2,22 @@ package fr.perso.chess.view;
 
 import fr.perso.chess.model.general.Board;
 import fr.perso.chess.model.general.Cell;
-import fr.perso.chess.model.pieces.Piece;
+import fr.perso.chess.model.general.Position;
 import javafx.scene.layout.GridPane;
 
 import java.beans.PropertyChangeEvent;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 
 public class BoardView extends GridPane {
+
+
+    public CellView[][] getCellViews() {
+        return cellViews;
+    }
+
     private final CellView[][] cellViews;
 
     public BoardView() {
@@ -38,5 +45,11 @@ public class BoardView extends GridPane {
 
     public void initializeBoard(Board board) {
         renderBoard(Arrays.stream(board.getCells()).flatMap(Arrays::stream).toList());
+    }
+
+    public void bindCellsClickAction(Consumer<Position> action) {
+        Arrays.stream(this.cellViews)
+                .flatMap(Arrays::stream)
+                .forEach(cv -> cv.setOnClicked(action));
     }
 }

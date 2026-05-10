@@ -47,17 +47,33 @@ public class Board implements IBoard {
         };
     }
 
+    public Cell getCellFromPreviousWithOffset(Cell cell, int offsetRow, int offsetCol) {
+        if(offsetRow >= 8 || offsetCol >= 8 || offsetRow< 0 || offsetCol < 0){
+            System.out.println("index non valide sur le board");
+            return null;
+        }
+        return cells[cell.getPosition().row() + offsetRow][cell.getPosition().col() + offsetCol];
+    }
+
+    public Cell getCellFromPosition(Position position) {
+        return this.cells[position.row()][position.col()];
+    }
+
     public Cell[][] getCells() {
         return cells;
     }
 
     @Override
     public Piece getPiece(Position position) {
-        return null;
+        return cells[position.col()][position.row()].getPiece();
     }
 
     @Override
     public boolean movePiece(Position from, Position to) {
+        if (getPiece(from) == null)
+            return false;
+
+
         return false;
     }
 
