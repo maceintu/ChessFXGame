@@ -1,14 +1,9 @@
 package fr.perso.chess.model.pieces;
-
-import fr.perso.chess.model.general.Board;
-import fr.perso.chess.model.general.Cell;
-import fr.perso.chess.model.general.Player;
-
-import java.util.List;
+import fr.perso.chess.model.general.PlayerColor;
 
 public class Bishop extends Piece {
-    public Bishop(Player player) {
-        super(player);
+    public Bishop(PlayerColor color) {
+        super(color);
     }
 
 //    @Override

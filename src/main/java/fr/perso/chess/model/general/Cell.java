@@ -1,22 +1,29 @@
 package fr.perso.chess.model.general;
 
 import fr.perso.chess.model.pieces.Piece;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 
 public class Cell {
-    Cell(Position position){
+    Cell(Position position) {
         this.position = position;
     }
 
-    public Position position;
-    private final ObjectProperty<Piece> pieceProperty = new SimpleObjectProperty<>(null);
-    public ObjectProperty<Piece> pieceProperty() { return pieceProperty; }
+    private Position position;
+    private Piece piece;
 
-    public void setPiece(Piece piece) {
-//        return null;
-//        this.pieceProperty.set(piece);
+    public Position getPosition() {
+        return position;
     }
 
-    public Piece getPiece() { return this.pieceProperty.get(); }
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+    }
+
+    public Piece getPiece() {
+        return this.piece;
+    }
+
 }

@@ -13,6 +13,7 @@ public class GameController {
     public GameController(Board board, BoardView boardView) {
         this.board = board;
         this.boardView = boardView;
-    }
+        this.boardView.initializeBoard(this.board);
+        this.board.addListener(event -> this.boardView.onBoardUpdate(event));    }
 
 }

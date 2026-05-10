@@ -1,20 +1,21 @@
 package fr.perso.chess.model.general;
 
-import java.sql.Time;
-
 public class Player {
-    public Player(boolean isWhite){
-        this.white = isWhite;
-    };
-    private final boolean white;
-    private boolean check = false;
-    private Time leftTime;
+    public Player(PlayerColor color) {
+        this.color = color;
+        this.time = Long.MAX_VALUE;
+        this.check = false;
+    }
+
+    private PlayerColor color;
+    private long time;
+    boolean check;
 
     public boolean isCheck() {
         return check;
     }
 
-    public boolean isWhite() {
-        return white;
+    public PlayerColor getColor(){
+        return this.color;
     }
 }

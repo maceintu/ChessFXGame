@@ -3,13 +3,14 @@ package fr.perso.chess.model.pieces;
 import fr.perso.chess.model.general.Board;
 import fr.perso.chess.model.general.Cell;
 import fr.perso.chess.model.general.Player;
+import fr.perso.chess.model.general.PlayerColor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Pawn extends Piece {
-    public Pawn(Player player) {
-        super(player);
+    public Pawn(PlayerColor color) {
+        super(color);
     }
 
 //    @Override

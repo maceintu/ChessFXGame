@@ -1,15 +1,10 @@
 package fr.perso.chess.model.pieces;
 
-import fr.perso.chess.model.general.Board;
-import fr.perso.chess.model.general.Cell;
-import fr.perso.chess.model.general.Player;
-
-import java.util.ArrayList;
-import java.util.List;
+import fr.perso.chess.model.general.PlayerColor;
 
 public class Knight extends Piece{
-    public Knight(Player player) {
-        super(player);
+    public Knight(PlayerColor color) {
+        super(color);
     }
 
 //    @Override

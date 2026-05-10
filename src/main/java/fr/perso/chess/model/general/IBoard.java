@@ -2,12 +2,13 @@ package fr.perso.chess.model.general;
 
 import fr.perso.chess.model.pieces.Piece;
 
-public interface IBoard {
+import java.beans.PropertyChangeListener;
 
-    void initialize();
+public interface IBoard {
     Piece getPiece(Position position);
-    boolean isEmpty(Position position);
+    boolean movePiece(Position from, Position to);
     boolean isGameOver();
-    void addListener(BoardListener listener);
-    void removeListener(BoardListener listener);
+    Player getCurrentPlayer();
+    void addListener(PropertyChangeListener listener);
+    void removeListener(PropertyChangeListener listener);
 }
