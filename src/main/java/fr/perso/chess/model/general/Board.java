@@ -48,11 +48,13 @@ public class Board implements IBoard {
     }
 
     public Cell getCellFromPreviousWithOffset(Cell cell, int offsetRow, int offsetCol) {
-        if(offsetRow >= 8 || offsetCol >= 8 || offsetRow< 0 || offsetCol < 0){
+        int newRow = cell.getPosition().row() + offsetRow;
+        int newCol = cell.getPosition().col() + offsetCol;
+        if(newRow >= 8 || newCol >= 8 || newRow< 0 || newCol < 0){
             System.out.println("index non valide sur le board");
             return null;
         }
-        return cells[cell.getPosition().row() + offsetRow][cell.getPosition().col() + offsetCol];
+        return cells[newRow][newCol];
     }
 
     public Cell getCellFromPosition(Position position) {
@@ -65,15 +67,13 @@ public class Board implements IBoard {
 
     @Override
     public Piece getPiece(Position position) {
-        return cells[position.col()][position.row()].getPiece();
+        return cells[position.row()][position.col()].getPiece();
     }
 
     @Override
     public boolean movePiece(Position from, Position to) {
         if (getPiece(from) == null)
             return false;
-
-
         return false;
     }
 

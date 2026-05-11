@@ -37,7 +37,6 @@ public class BoardView extends GridPane {
     }
 
     private void renderBoard(List<Cell> updatedCells) {
-        // On parcourt les 64 cases du modèle
         for (Cell cell : updatedCells) {
             cellViews[cell.getPosition().row()][cell.getPosition().col()].drawFromCell(cell);
         }
@@ -51,5 +50,17 @@ public class BoardView extends GridPane {
         Arrays.stream(this.cellViews)
                 .flatMap(Arrays::stream)
                 .forEach(cv -> cv.setOnClicked(action));
+    }
+
+    public void showPossibleMoves(List<Cell> cells){
+        for(Cell cell : cells){
+            cellViews[cell.getPosition().row()][cell.getPosition().col()].showDot(true);
+        }
+    }
+
+    public void clearPossibleMoves(List<Cell> cells){
+        for(Cell cell : cells){
+            cellViews[cell.getPosition().row()][cell.getPosition().col()].showDot(false);
+        }
     }
 }

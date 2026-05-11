@@ -3,16 +3,19 @@ package fr.perso.chess.controller;
 import fr.perso.chess.model.general.Board;
 import fr.perso.chess.model.general.Cell;
 import fr.perso.chess.model.general.Position;
+import fr.perso.chess.model.pieces.Piece;
 import fr.perso.chess.view.BoardView;
 import fr.perso.chess.view.CellView;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class GameController {
 
     private Board board;
     private BoardView boardView;
     private Position selectedPosition = null;
+    private List<Cell> possibleMoves;
 
     public GameController(Board board, BoardView boardView) {
         this.board = board;
@@ -24,12 +27,17 @@ public class GameController {
 
     private void handlePlayerClick(Position clickedPosition) {
         if (selectedPosition == null) {
-            if (board.getPiece(clickedPosition) != null) {
+            Piece piece = board.getPiece(clickedPosition);
+            if (piece != null) {
                 selectedPosition = clickedPosition;
-                this.boardView.getCellViews()[selectedPosition.row()][selectedPosition.col()].showDot(true);
+                possibleMoves = piece.getLegalMoves(board, selectedPosition);
+                boardView.showPossibleMoves(possibleMoves);
+            } else {
+                boardView.clearPossibleMoves(possibleMoves);
             }
         } else {
             board.movePiece(selectedPosition, clickedPosition);
+            boardView.clearPossibleMoves(possibleMoves);
             selectedPosition = null;
         }
     }

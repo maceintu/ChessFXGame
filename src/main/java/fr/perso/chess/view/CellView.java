@@ -11,15 +11,15 @@ import java.util.function.Consumer;
 
 public class CellView extends StackPane {
 
+    public static final double SIZE = 50.0;
     private final Circle dot = new Circle(10, Color.web("#000000", 0.3));
     private PieceView currentPieceView;
-    public static final double SIZE = 50.0;
+    private final Position position;
 
     public Position getPosition() {
         return position;
     }
 
-    private final Position position;
 
     public CellView(int row, int col) {
         this.position = new Position(row, col);
@@ -40,7 +40,6 @@ public class CellView extends StackPane {
             this.currentPieceView = new PieceView(cell.getPiece());
             this.getChildren().add(this.currentPieceView);
         }
-        ;
     }
 
     public void setOnClicked(Consumer<Position> func) {
