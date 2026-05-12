@@ -28,7 +28,7 @@ public class GameController {
     private void handlePlayerClick(Position clickedPosition) {
         if (selectedPosition == null) {
             Piece piece = board.getPiece(clickedPosition);
-            if (piece != null) {
+            if (piece != null && piece.getColor().equals(board.getCurrentPlayer().getColor())) {
                 selectedPosition = clickedPosition;
                 possibleMoves = piece.getLegalMoves(board, selectedPosition);
                 boardView.showPossibleMoves(possibleMoves);

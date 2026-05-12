@@ -32,7 +32,7 @@ public class BoardView extends GridPane {
     }
 
     public void onBoardUpdate(PropertyChangeEvent event) {
-        if (event.getPropertyName().equals("MoveUpdate"))
+        if (event.getPropertyName().equals("CellsUpdated"))
             renderBoard((List<Cell>) event.getNewValue());
     }
 

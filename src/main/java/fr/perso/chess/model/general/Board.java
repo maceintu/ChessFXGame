@@ -50,7 +50,7 @@ public class Board implements IBoard {
     public Cell getCellFromPreviousWithOffset(Cell cell, int offsetRow, int offsetCol) {
         int newRow = cell.getPosition().row() + offsetRow;
         int newCol = cell.getPosition().col() + offsetCol;
-        if(newRow >= 8 || newCol >= 8 || newRow< 0 || newCol < 0){
+        if (newRow >= 8 || newCol >= 8 || newRow < 0 || newCol < 0) {
             System.out.println("index non valide sur le board");
             return null;
         }
@@ -72,9 +72,22 @@ public class Board implements IBoard {
 
     @Override
     public boolean movePiece(Position from, Position to) {
-        if (getPiece(from) == null)
+        Piece piece = getPiece(from);
+        if (piece == null)
             return false;
+        if (piece.getLegalMoves(this, from).stream().map(Cell::getPosition).toList().contains(to)) {
+            Cell fromCell = this.getCellFromPosition(from);
+            Cell toCell = this.getCellFromPosition(to);
+            fromCell.setPiece(null);
+            toCell.setPiece(piece);
+            switchPlayer();
+            pcs.firePropertyChange("CellsUpdated", null, List.of(fromCell, toCell));
+        }
         return false;
+    }
+
+    public void switchPlayer(){
+        currentPlayer = currentPlayer.equals(whitePlayer) ? blackPlayer : whitePlayer;
     }
 
     @Override
@@ -84,11 +97,12 @@ public class Board implements IBoard {
 
     @Override
     public Player getCurrentPlayer() {
-        return null;
+        return this.currentPlayer;
     }
 
     @Override
     public void addListener(PropertyChangeListener listener) {
+        this.pcs.addPropertyChangeListener(listener);
     }
 
     @Override
