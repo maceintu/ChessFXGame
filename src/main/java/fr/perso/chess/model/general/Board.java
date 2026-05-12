@@ -42,7 +42,7 @@ public class Board implements IBoard {
             case 1, 6 -> new Knight(color);
             case 2, 5 -> new Bishop(color);
             case 3 -> new Queen(color);
-            //case 4    -> new King(player, cell);
+            case 4    -> new King(color);
             default -> null;
         };
     }
