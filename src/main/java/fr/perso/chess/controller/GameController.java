@@ -6,6 +6,7 @@ import fr.perso.chess.model.general.Position;
 import fr.perso.chess.model.pieces.Piece;
 import fr.perso.chess.view.BoardView;
 import fr.perso.chess.view.CellView;
+import fr.perso.chess.view.ImageFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +19,7 @@ public class GameController {
     private List<Cell> possibleMoves;
 
     public GameController(Board board, BoardView boardView) {
+        ImageFactory.preload();
         this.board = board;
         this.boardView = boardView;
         this.boardView.initializeBoard(this.board);
