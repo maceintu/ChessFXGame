@@ -14,7 +14,7 @@ public class Knight extends Piece{
     }
 
     @Override
-    public List<Cell> getLegalMoves(Board board, Position position) {
+    public List<Cell> getPossibleMoves(Board board, Position position) {
 
         List<Cell> legalMoves = new ArrayList<>();
         int[][] jumps = {{1, 2}, {-1, -2}, {-1, 2}, {1, -2}, {2, 1}, {-2, -1}, {-2, 1}, {2, -1}};

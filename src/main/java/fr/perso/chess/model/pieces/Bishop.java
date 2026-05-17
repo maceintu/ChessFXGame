@@ -12,9 +12,9 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public List<Cell> getLegalMoves( Board board, Position position) {
+    public List<Cell> getPossibleMoves(Board board, Position position) {
         int[][] directions = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
-        return this.getLinearLegalMoves(board,position, directions);
+        return getLinearMoves(board, position, directions);
     }
 }
 

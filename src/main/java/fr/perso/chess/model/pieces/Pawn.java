@@ -11,7 +11,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Cell> getLegalMoves(Board board, Position position) {
+    public List<Cell> getPossibleMoves(Board board, Position position) {
         List<Cell> legalMoves = new ArrayList<>();
         int direction = this.getColor().equals(PlayerColor.BLACK) ? 1 : -1;
         int startRow = this.getColor().equals(PlayerColor.BLACK) ? 1 : 6;

@@ -9,13 +9,10 @@ import java.util.List;
 
 public class Board implements IBoard {
     private final PropertyChangeSupport pcs;
-
-
     private Cell[][] cells;
     Player whitePlayer;
     Player blackPlayer;
     Player currentPlayer;
-
 
     public Board() {
         this.pcs = new PropertyChangeSupport(this);
@@ -42,7 +39,7 @@ public class Board implements IBoard {
             case 1, 6 -> new Knight(color);
             case 2, 5 -> new Bishop(color);
             case 3 -> new Queen(color);
-            case 4    -> new King(color);
+            case 4 -> new King(color);
             default -> null;
         };
     }
@@ -51,7 +48,6 @@ public class Board implements IBoard {
         int newRow = cell.getPosition().row() + offsetRow;
         int newCol = cell.getPosition().col() + offsetCol;
         if (newRow >= 8 || newCol >= 8 || newRow < 0 || newCol < 0) {
-            System.out.println("index non valide sur le board");
             return null;
         }
         return cells[newRow][newCol];
@@ -70,24 +66,76 @@ public class Board implements IBoard {
         return cells[position.row()][position.col()].getPiece();
     }
 
+    private Piece makeMove(Position from, Position to) {
+        Cell fromCell = this.getCellFromPosition(from);
+        Cell toCell = this.getCellFromPosition(to);
+        Piece pieceToMove = fromCell.getPiece();
+        Piece capturedPiece = toCell.getPiece();
+        toCell.setPiece(pieceToMove);
+        fromCell.setPiece(null);
+        return capturedPiece;
+    }
+
+    private void undoMove(Position from, Position to, Piece capturedPiece) {
+        Cell fromCell = this.getCellFromPosition(from);
+        Cell toCell = this.getCellFromPosition(to);
+        Piece pieceThatMoved = toCell.getPiece();
+        fromCell.setPiece(pieceThatMoved);
+        toCell.setPiece(capturedPiece);
+    }
+
     @Override
     public boolean movePiece(Position from, Position to) {
         Piece piece = getPiece(from);
         if (piece == null)
             return false;
-        if (piece.getLegalMoves(this, from).stream().map(Cell::getPosition).toList().contains(to)) {
-            Cell fromCell = this.getCellFromPosition(from);
-            Cell toCell = this.getCellFromPosition(to);
-            fromCell.setPiece(null);
-            toCell.setPiece(piece);
+        if (getLegalMoves(piece, from).stream().map(Cell::getPosition).toList().contains(to)) {
+            makeMove(from, to);
             switchPlayer();
-            pcs.firePropertyChange("CellsUpdated", null, List.of(fromCell, toCell));
+            pcs.firePropertyChange("CellsUpdated", null, List.of(getCellFromPosition(from), getCellFromPosition(to)));
+            return true;
         }
         return false;
     }
 
-    public void switchPlayer(){
+    public List<Cell> getLegalMoves(Piece piece, Position position) {
+        List<Cell> possibleMoves = piece.getPossibleMoves(this, position);
+        List<Cell> legalMoves = new ArrayList<>();
+        for (Cell destinationCell : possibleMoves) {
+            Piece capturedPiece = makeMove(position, destinationCell.getPosition());
+            if (!isCurrentPlayerChecked()) {
+                legalMoves.add(destinationCell);
+            }
+            undoMove(position, destinationCell.getPosition(), capturedPiece);
+        }
+        return legalMoves;
+    }
+
+
+    public void switchPlayer() {
         currentPlayer = currentPlayer.equals(whitePlayer) ? blackPlayer : whitePlayer;
+    }
+
+    public boolean isPlayerChecked(Player player) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Cell currentCell = this.cells[row][col];
+                Piece piece = currentCell.getPiece();
+                if (piece != null && piece.getColor() != player.getColor()) {
+                    List<Cell> threatenedCells = piece.getPossibleMoves(this, currentCell.getPosition());
+                    for (Cell target : threatenedCells) {
+                        if (target.getPiece() instanceof King) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isCurrentPlayerChecked() {
+        return isPlayerChecked(currentPlayer);
     }
 
     @Override
@@ -107,5 +155,6 @@ public class Board implements IBoard {
 
     @Override
     public void removeListener(PropertyChangeListener listener) {
+        this.pcs.removePropertyChangeListener(listener);
     }
 }

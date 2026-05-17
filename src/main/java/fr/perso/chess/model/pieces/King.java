@@ -14,7 +14,7 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Cell> getLegalMoves(Board board, Position position) {
+    public List<Cell> getPossibleMoves(Board board, Position position) {
         List<Cell> legalMoves = new ArrayList<>();
         int[][] directions = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}, {1, 0}, {-1, 0}, {0, 1}, {0, -1}};
         for(int[] dir : directions){

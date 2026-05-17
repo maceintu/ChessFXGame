@@ -20,7 +20,7 @@ public abstract class Piece {
         return color;
     }
 
-    public List<Cell> getLinearLegalMoves(Board board, Position position, int[][] directions) {
+    public List<Cell> getLinearMoves(Board board, Position position, int[][] directions) {
         ArrayList<Cell> legalMoves = new ArrayList<>();
         for (int[] d : directions) {
             Cell next = board.getCellFromPosition(position);
@@ -38,6 +38,6 @@ public abstract class Piece {
         return legalMoves;
     }
 
-    public abstract List<Cell> getLegalMoves(Board board, Position position);
+    public abstract List<Cell> getPossibleMoves(Board board, Position position);
 }
 
