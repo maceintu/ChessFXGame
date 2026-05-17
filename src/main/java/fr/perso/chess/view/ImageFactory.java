@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ImageFactory {
     private static final Map<String, Image> cache = new HashMap<>();
@@ -19,7 +20,7 @@ public class ImageFactory {
                 String filename = color + type + ".png";
                 String fullPath = BASE_PATH + filename;
                 try {
-                    Image img = new Image(ImageFactory.class.getResourceAsStream(fullPath));
+                    Image img = new Image(Objects.requireNonNull(ImageFactory.class.getResourceAsStream(fullPath)));
                     if (img.isError()) {
                         System.err.println("Erreur de chargement pour : " + fullPath);
                     } else {
