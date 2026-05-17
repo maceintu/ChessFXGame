@@ -6,15 +6,18 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Board implements IBoard {
     private final PropertyChangeSupport pcs;
-    private Cell[][] cells;
+    private final Cell[][] cells;
+    private final Stack<Move> moveStack;
     Player whitePlayer;
     Player blackPlayer;
     Player currentPlayer;
 
     public Board() {
+        this.moveStack = new Stack<>();
         this.pcs = new PropertyChangeSupport(this);
         whitePlayer = new Player(PlayerColor.WHITE);
         blackPlayer = new Player(PlayerColor.BLACK);
@@ -66,22 +69,19 @@ public class Board implements IBoard {
         return cells[position.row()][position.col()].getPiece();
     }
 
-    private Piece makeMove(Position from, Position to) {
+    private Move makeMove(Position from, Position to) {
         Cell fromCell = this.getCellFromPosition(from);
         Cell toCell = this.getCellFromPosition(to);
         Piece pieceToMove = fromCell.getPiece();
         Piece capturedPiece = toCell.getPiece();
         toCell.setPiece(pieceToMove);
         fromCell.setPiece(null);
-        return capturedPiece;
+        return new Move(from, to, pieceToMove, capturedPiece);
     }
 
-    private void undoMove(Position from, Position to, Piece capturedPiece) {
-        Cell fromCell = this.getCellFromPosition(from);
-        Cell toCell = this.getCellFromPosition(to);
-        Piece pieceThatMoved = toCell.getPiece();
-        fromCell.setPiece(pieceThatMoved);
-        toCell.setPiece(capturedPiece);
+    private void undoMove(Move move) {
+        getCellFromPosition(move.from()).setPiece(move.movedPiece());
+        getCellFromPosition(move.to()).setPiece(move.capturedPiece());
     }
 
     @Override
@@ -90,7 +90,8 @@ public class Board implements IBoard {
         if (piece == null)
             return false;
         if (getLegalMoves(piece, from).stream().map(Cell::getPosition).toList().contains(to)) {
-            makeMove(from, to);
+            Move move = makeMove(from, to);
+            this.moveStack.add(move);
             switchPlayer();
             pcs.firePropertyChange("CellsUpdated", null, List.of(getCellFromPosition(from), getCellFromPosition(to)));
             return true;
@@ -98,15 +99,29 @@ public class Board implements IBoard {
         return false;
     }
 
+    public boolean undoLastMove() {
+        if (moveStack.isEmpty()) {
+            return false;
+        }
+        Move lastMove = moveStack.pop();
+        undoMove(lastMove);
+        switchPlayer();
+        pcs.firePropertyChange("CellsUpdated", null, List.of(
+                getCellFromPosition(lastMove.from()),
+                getCellFromPosition(lastMove.to())
+        ));
+        return true;
+    }
+
     public List<Cell> getLegalMoves(Piece piece, Position position) {
         List<Cell> possibleMoves = piece.getPossibleMoves(this, position);
         List<Cell> legalMoves = new ArrayList<>();
         for (Cell destinationCell : possibleMoves) {
-            Piece capturedPiece = makeMove(position, destinationCell.getPosition());
+            Move move = makeMove(position, destinationCell.getPosition());
             if (!isCurrentPlayerChecked()) {
                 legalMoves.add(destinationCell);
             }
-            undoMove(position, destinationCell.getPosition(), capturedPiece);
+            undoMove(move);
         }
         return legalMoves;
     }

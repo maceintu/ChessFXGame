@@ -4,6 +4,7 @@ import fr.perso.chess.model.general.Board;
 import fr.perso.chess.view.BoardView;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
@@ -36,9 +37,14 @@ public class GameManager {
     public void startLocalGame() {
         Board board = new Board();
         BoardView boardView = new BoardView();
-        boardView.initializeBoard(board);
-        localMatchController gameController = new localMatchController(board, boardView);
-        primaryStage.setScene(new Scene(boardView, 600, 600));
+        Button undoButton = new Button("Undo");
+        VBox sidebar = new VBox(20);
+        sidebar.setAlignment(Pos.CENTER);
+        sidebar.getChildren().add(undoButton);
+        HBox gameRoot = new HBox(30);
+        gameRoot.getChildren().addAll(boardView, sidebar);
+        LocalMatchController controller = new LocalMatchController(board, boardView, undoButton);
+        primaryStage.setScene(new Scene(gameRoot, 900, 600));
     }
 
     public void onGameEnded(String message) {
