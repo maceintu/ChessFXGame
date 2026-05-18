@@ -74,9 +74,26 @@ public class Board implements IBoard {
         Cell toCell = this.getCellFromPosition(to);
         Piece pieceToMove = fromCell.getPiece();
         Piece capturedPiece = toCell.getPiece();
+        boolean isDoublePawnPush = false;
+        boolean isEnPassant = false;
+        boolean isCastling = false;
+
+        if (pieceToMove instanceof Pawn) {
+            if (Math.abs(to.row() - from.row()) == 2)
+                isDoublePawnPush = true;
+            else if (from.col() != to.col() && capturedPiece == null) { // TODO captured piece pass pas null dans la prise en passant je comprends pas pourquoi TODO
+                isEnPassant = true;
+                Cell enemyPawnCell = this.cells[from.row()][to.col()];
+                capturedPiece = enemyPawnCell.getPiece();
+                enemyPawnCell.setPiece(null);
+            }
+        } else if (pieceToMove instanceof King) {
+            if (Math.abs(to.col() - from.col()) == 2)
+                isCastling = true;
+        }
         toCell.setPiece(pieceToMove);
         fromCell.setPiece(null);
-        return new Move(from, to, pieceToMove, capturedPiece);
+        return new Move(from, to, pieceToMove, capturedPiece, isDoublePawnPush, isEnPassant, isCastling);
     }
 
     private void undoMove(Move move) {
@@ -90,10 +107,15 @@ public class Board implements IBoard {
         if (piece == null)
             return false;
         if (getLegalMoves(piece, from).stream().map(Cell::getPosition).toList().contains(to)) {
+            List<Cell> cellsToUpdate = new ArrayList<>();
             Move move = makeMove(from, to);
             this.moveStack.add(move);
+            cellsToUpdate.add(getCellFromPosition(from));
+            cellsToUpdate.add(getCellFromPosition(to));
+            if(move.isEnPassant())
+                cellsToUpdate.add(getCellFromPosition(new Position(from.row(), to.col())));
             switchPlayer();
-            pcs.firePropertyChange("CellsUpdated", null, List.of(getCellFromPosition(from), getCellFromPosition(to)));
+            pcs.firePropertyChange("CellsUpdated", null, cellsToUpdate);
             return true;
         }
         return false;
@@ -171,5 +193,11 @@ public class Board implements IBoard {
     @Override
     public void removeListener(PropertyChangeListener listener) {
         this.pcs.removePropertyChangeListener(listener);
+    }
+
+    public Move getLastMove() {
+        if (moveStack.isEmpty())
+            return null;
+        return moveStack.peek();
     }
 }
