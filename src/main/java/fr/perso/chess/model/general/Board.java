@@ -81,7 +81,7 @@ public class Board implements IBoard {
         if (pieceToMove instanceof Pawn) {
             if (Math.abs(to.row() - from.row()) == 2)
                 isDoublePawnPush = true;
-            else if (from.col() != to.col() && capturedPiece == null) { // TODO captured piece pass pas null dans la prise en passant je comprends pas pourquoi TODO
+            else if (from.col() != to.col() && capturedPiece == null) {
                 isEnPassant = true;
                 Cell enemyPawnCell = this.cells[from.row()][to.col()];
                 capturedPiece = enemyPawnCell.getPiece();
@@ -98,7 +98,11 @@ public class Board implements IBoard {
 
     private void undoMove(Move move) {
         getCellFromPosition(move.from()).setPiece(move.movedPiece());
-        getCellFromPosition(move.to()).setPiece(move.capturedPiece());
+        if (move.isEnPassant()) {
+            this.cells[move.from().row()][move.to().col()].setPiece(move.capturedPiece());
+            getCellFromPosition(move.to()).setPiece(null);
+        } else
+            getCellFromPosition(move.to()).setPiece(move.capturedPiece());
     }
 
     @Override
@@ -112,7 +116,7 @@ public class Board implements IBoard {
             this.moveStack.add(move);
             cellsToUpdate.add(getCellFromPosition(from));
             cellsToUpdate.add(getCellFromPosition(to));
-            if(move.isEnPassant())
+            if (move.isEnPassant())
                 cellsToUpdate.add(getCellFromPosition(new Position(from.row(), to.col())));
             switchPlayer();
             pcs.firePropertyChange("CellsUpdated", null, cellsToUpdate);
@@ -128,10 +132,13 @@ public class Board implements IBoard {
         Move lastMove = moveStack.pop();
         undoMove(lastMove);
         switchPlayer();
-        pcs.firePropertyChange("CellsUpdated", null, List.of(
-                getCellFromPosition(lastMove.from()),
-                getCellFromPosition(lastMove.to())
-        ));
+        List<Cell> cellsToUpdate = new ArrayList<>();
+        cellsToUpdate.add(getCellFromPosition(lastMove.from()));
+        cellsToUpdate.add(getCellFromPosition(lastMove.to()));
+        if (lastMove.isEnPassant()) {
+            cellsToUpdate.add(getCellFromPosition(new Position(lastMove.from().row(), lastMove.to().col())));
+        }
+        pcs.firePropertyChange("CellsUpdated", null, cellsToUpdate);
         return true;
     }
 
