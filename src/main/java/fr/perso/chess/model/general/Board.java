@@ -15,10 +15,12 @@ public class Board implements IBoard {
     Player whitePlayer;
     Player blackPlayer;
     Player currentPlayer;
+    CastlingRights castlingRights;
 
     public Board() {
         this.moveStack = new Stack<>();
         this.pcs = new PropertyChangeSupport(this);
+        castlingRights = new CastlingRights(true, true, true, true);
         whitePlayer = new Player(PlayerColor.WHITE);
         blackPlayer = new Player(PlayerColor.BLACK);
         currentPlayer = whitePlayer;
@@ -70,6 +72,7 @@ public class Board implements IBoard {
     }
 
     private Move makeMove(Position from, Position to) {
+        CastlingRights savedRights = this.castlingRights;
         Cell fromCell = this.getCellFromPosition(from);
         Cell toCell = this.getCellFromPosition(to);
         Piece pieceToMove = fromCell.getPiece();
@@ -93,7 +96,7 @@ public class Board implements IBoard {
         }
         toCell.setPiece(pieceToMove);
         fromCell.setPiece(null);
-        return new Move(from, to, pieceToMove, capturedPiece, isDoublePawnPush, isEnPassant, isCastling);
+        return new Move(from, to, pieceToMove, capturedPiece, isDoublePawnPush, isEnPassant, isCastling, savedRights);
     }
 
     private void undoMove(Move move) {
