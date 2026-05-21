@@ -12,10 +12,15 @@ public class Board implements IBoard {
     private final PropertyChangeSupport pcs;
     private final Cell[][] cells;
     private final Stack<Move> moveStack;
-    Player whitePlayer;
-    Player blackPlayer;
-    Player currentPlayer;
-    CastlingRights castlingRights;
+    private final Player whitePlayer;
+    private final Player blackPlayer;
+    private Player currentPlayer;
+
+    public CastlingRights getCastlingRights() {
+        return castlingRights;
+    }
+
+    private CastlingRights castlingRights;
 
     public Board() {
         this.moveStack = new Stack<>();
@@ -91,8 +96,31 @@ public class Board implements IBoard {
                 enemyPawnCell.setPiece(null);
             }
         } else if (pieceToMove instanceof King) {
-            if (Math.abs(to.col() - from.col()) == 2)
+            if (pieceToMove.getColor().equals(PlayerColor.WHITE)) {
+                this.castlingRights = this.castlingRights.withWhiteRights(false, false);
+            } else {
+                this.castlingRights = this.castlingRights.withBlackRights(false, false);
+            }
+            if (Math.abs(to.col() - from.col()) == 2) {
                 isCastling = true;
+                // bouge la tour du rock
+                if (to.col() == 6) {
+                    Cell rookCornerCell = this.cells[from.row()][7];
+                    Cell rookTargetCell = this.cells[from.row()][5];
+                    rookTargetCell.setPiece(rookCornerCell.getPiece());
+                    rookCornerCell.setPiece(null);
+                } else if (to.col() == 2) {
+                    Cell rookCornerCell = this.cells[from.row()][0];
+                    Cell rookTargetCell = this.cells[from.row()][3];
+                    rookTargetCell.setPiece(rookCornerCell.getPiece());
+                    rookCornerCell.setPiece(null);
+                }
+            }
+        } else if (pieceToMove instanceof Tower) {
+            updateCastlingRightsForTowerMoved(from, pieceToMove.getColor());
+        }
+        if (capturedPiece instanceof Tower) {
+            updateCastlingRightsForTowerMoved(to, capturedPiece.getColor());
         }
         toCell.setPiece(pieceToMove);
         fromCell.setPiece(null);
@@ -104,8 +132,24 @@ public class Board implements IBoard {
         if (move.isEnPassant()) {
             this.cells[move.from().row()][move.to().col()].setPiece(move.capturedPiece());
             getCellFromPosition(move.to()).setPiece(null);
-        } else
-            getCellFromPosition(move.to()).setPiece(move.capturedPiece());
+            return;
+        }
+        if (move.isCastling()) {
+            int row = move.from().row();
+            if (move.to().col() == 6) {
+                Cell rookCornerCell = this.cells[row][7];
+                Cell rookTargetCell = this.cells[row][5];
+                rookCornerCell.setPiece(rookTargetCell.getPiece());
+                rookTargetCell.setPiece(null);
+            } else if (move.to().col() == 2) {
+                Cell rookCornerCell = this.cells[row][0];
+                Cell rookTargetCell = this.cells[row][3];
+                rookCornerCell.setPiece(rookTargetCell.getPiece());
+                rookTargetCell.setPiece(null);
+            }
+        }
+        getCellFromPosition(move.to()).setPiece(move.capturedPiece());
+        this.castlingRights = move.castlingRights();
     }
 
     @Override
@@ -121,6 +165,15 @@ public class Board implements IBoard {
             cellsToUpdate.add(getCellFromPosition(to));
             if (move.isEnPassant())
                 cellsToUpdate.add(getCellFromPosition(new Position(from.row(), to.col())));
+            if (move.isCastling()) {
+                if (to.col() == 6) {
+                    cellsToUpdate.add(getCellFromPosition(new Position(from.row(), 7)));
+                    cellsToUpdate.add(getCellFromPosition(new Position(from.row(), 5)));
+                } else if (to.col() == 2) {
+                    cellsToUpdate.add(getCellFromPosition(new Position(from.row(), 0)));
+                    cellsToUpdate.add(getCellFromPosition(new Position(from.row(), 3)));
+                }
+            }
             switchPlayer();
             pcs.firePropertyChange("CellsUpdated", null, cellsToUpdate);
             return true;
@@ -140,6 +193,15 @@ public class Board implements IBoard {
         cellsToUpdate.add(getCellFromPosition(lastMove.to()));
         if (lastMove.isEnPassant()) {
             cellsToUpdate.add(getCellFromPosition(new Position(lastMove.from().row(), lastMove.to().col())));
+        } else if (lastMove.isCastling()) {
+            int row = lastMove.from().row();
+            if (lastMove.to().col() == 6) {
+                cellsToUpdate.add(getCellFromPosition(new Position(row, 7)));
+                cellsToUpdate.add(getCellFromPosition(new Position(row, 5)));
+            } else if (lastMove.to().col() == 2) {
+                cellsToUpdate.add(getCellFromPosition(new Position(row, 0)));
+                cellsToUpdate.add(getCellFromPosition(new Position(row, 3)));
+            }
         }
         pcs.firePropertyChange("CellsUpdated", null, cellsToUpdate);
         return true;
@@ -157,7 +219,6 @@ public class Board implements IBoard {
         }
         return legalMoves;
     }
-
 
     public void switchPlayer() {
         currentPlayer = currentPlayer.equals(whitePlayer) ? blackPlayer : whitePlayer;
@@ -210,4 +271,33 @@ public class Board implements IBoard {
             return null;
         return moveStack.peek();
     }
+
+    private void updateCastlingRightsForTowerMoved(Position initialTowerPos, PlayerColor color) {
+        if (color == PlayerColor.WHITE) {
+            if (initialTowerPos.col() == 7) {
+                this.castlingRights = new CastlingRights(
+                        false, this.castlingRights.whiteQueenSide(),
+                        this.castlingRights.blackKingSide(), this.castlingRights.blackQueenSide()
+                );
+            } else if (initialTowerPos.col() == 0) {
+                this.castlingRights = new CastlingRights(
+                        this.castlingRights.whiteKingSide(), false,
+                        this.castlingRights.blackKingSide(), this.castlingRights.blackQueenSide()
+                );
+            }
+        } else {
+            if (initialTowerPos.col() == 7) {
+                this.castlingRights = new CastlingRights(
+                        this.castlingRights.whiteKingSide(), this.castlingRights.whiteQueenSide(),
+                        false, this.castlingRights.blackQueenSide()
+                );
+            } else if (initialTowerPos.col() == 0) {
+                this.castlingRights = new CastlingRights(
+                        this.castlingRights.whiteKingSide(), this.castlingRights.whiteQueenSide(),
+                        this.castlingRights.blackKingSide(), false
+                );
+            }
+        }
+    }
+
 }
