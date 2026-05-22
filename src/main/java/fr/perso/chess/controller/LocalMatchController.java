@@ -5,7 +5,6 @@ import fr.perso.chess.model.general.Cell;
 import fr.perso.chess.model.general.Position;
 import fr.perso.chess.model.pieces.Piece;
 import fr.perso.chess.view.BoardView;
-import fr.perso.chess.view.ImageFactory;
 import javafx.scene.control.Button; // N'oublie pas l'import
 
 import java.util.List;
@@ -18,7 +17,6 @@ public class LocalMatchController {
     private List<Cell> possibleMoves;
 
     public LocalMatchController(Board board, BoardView boardView, Button undoButton) {
-        ImageFactory.preload();
         this.board = board;
         this.boardView = boardView;
         this.boardView.initializeBoard(this.board);
