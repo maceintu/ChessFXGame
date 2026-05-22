@@ -16,5 +16,10 @@ public class Bishop extends Piece {
         int[][] directions = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
         return getLinearMoves(board, position, directions);
     }
+
+    @Override
+    public String getName() {
+        return "Bishop";
+    }
 }
 

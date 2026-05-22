@@ -30,4 +30,9 @@ public class Knight extends Piece{
         }
         return legalMoves;
     }
+
+    @Override
+    public String getName() {
+        return "Knight";
+    }
 }

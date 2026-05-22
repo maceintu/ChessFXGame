@@ -17,4 +17,9 @@ public class Queen extends Piece {
         int[][] directions = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}, {1, 0}, {-1, 0}, {0, 1}, {0, -1}};
         return getLinearMoves(board, position, directions);
     }
+
+    @Override
+    public String getName() {
+        return "Queen";
+    }
 }

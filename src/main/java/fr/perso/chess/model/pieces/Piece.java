@@ -39,8 +39,6 @@ public abstract class Piece {
     }
 
     public abstract List<Cell> getPossibleMoves(Board board, Position position);
-    public String getName(){
-        return "Pawn";
-    }; //TODO surcharger toutes les pièces
+    public abstract String getName();
 }
 
