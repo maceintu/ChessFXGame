@@ -30,11 +30,9 @@ public class Board implements IBoard {
         blackPlayer = new Player(PlayerColor.BLACK);
         currentPlayer = whitePlayer;
         cells = new Cell[8][8];
-        for (int row = 0; row < cells.length; row++) {
-            for (int col = 0; col < cells.length; col++) {
+        for (int row = 0; row < cells.length; row++)
+            for (int col = 0; col < cells.length; col++)
                 cells[row][col] = new Cell(new Position(row, col));
-            }
-        }
         for (int i = 0; i < 8; i++) {
             cells[0][i].setPiece(createHeavyPiece(PlayerColor.BLACK, i));
             cells[1][i].setPiece(new Pawn(PlayerColor.BLACK));
@@ -211,6 +209,19 @@ public class Board implements IBoard {
         List<Cell> possibleMoves = piece.getPossibleMoves(this, position);
         List<Cell> legalMoves = new ArrayList<>();
         for (Cell destinationCell : possibleMoves) {
+            // verif que le roi n'est pas menacé sur la route du rock
+            if (piece instanceof King && Math.abs(destinationCell.getPosition().col() - position.col()) == 2) {
+                if (isCurrentPlayerChecked()) {
+                    continue;
+                }
+                Position transitPos = new Position(position.row(), destinationCell.getPosition().col() == 6 ? 5 : 3);
+                Move transitMove = makeMove(position, transitPos);
+                boolean isTransitSafe = !isCurrentPlayerChecked();
+                undoMove(transitMove);
+                if (!isTransitSafe) {
+                    continue;
+                }
+            }
             Move move = makeMove(position, destinationCell.getPosition());
             if (!isCurrentPlayerChecked()) {
                 legalMoves.add(destinationCell);
