@@ -12,9 +12,9 @@ import java.util.function.Consumer;
 public class CellView extends StackPane {
 
     public static final double SIZE = 50.0;
-    private final Circle dot = new Circle(10, Color.web("#000000", 0.3));
-    private PieceView currentPieceView;
     private final Position position;
+    private PieceView currentPieceView;
+    private Circle activeDot = null;
 
     public Position getPosition() {
         return position;
@@ -50,11 +50,27 @@ public class CellView extends StackPane {
 
     public void showDot(boolean visible) {
         if (visible) {
-            if (!this.getChildren().contains(dot)) {
-                this.getChildren().add(dot);
-            }
+            if (this.currentPieceView == null)
+                activeDot = createEmptyDot();
+             else
+                activeDot = createCaptureDot();
+            this.getChildren().add(activeDot);
         } else {
-            this.getChildren().remove(dot);
+            if (activeDot != null) {
+                this.getChildren().remove(activeDot);
+                activeDot = null;
+            }
         }
+    }
+
+    private Circle createEmptyDot() {
+        return new Circle(10, Color.web("#000000", 0.3));
+    }
+
+    private Circle createCaptureDot() {
+        Circle dot = new Circle(22, Color.TRANSPARENT);
+        dot.setStroke(Color.web("#000000", 0.3));
+        dot.setStrokeWidth(4);
+        return dot;
     }
 }
