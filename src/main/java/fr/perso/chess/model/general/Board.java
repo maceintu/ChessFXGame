@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class Board implements IBoard {
+public class Board {
     private final PropertyChangeSupport pcs;
     private final Cell[][] cells;
     private final Stack<Move> moveStack;
@@ -69,7 +69,6 @@ public class Board implements IBoard {
         return cells;
     }
 
-    @Override
     public Piece getPiece(Position position) {
         return cells[position.row()][position.col()].getPiece();
     }
@@ -150,7 +149,6 @@ public class Board implements IBoard {
         this.castlingRights = move.castlingRights();
     }
 
-    @Override
     public boolean movePiece(Position from, Position to) {
         Piece piece = getPiece(from);
         if (piece == null)
@@ -253,26 +251,35 @@ public class Board implements IBoard {
         return false;
     }
 
+    public boolean hasAnyLegalMove(Player player) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Cell currentCell = this.cells[row][col];
+                Piece piece = currentCell.getPiece();
+                if (piece != null && piece.getColor() == player.getColor()) {
+                    List<Cell> legalMoves = getLegalMoves(piece, currentCell.getPosition());
+                    if (!legalMoves.isEmpty()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean isCurrentPlayerChecked() {
         return isPlayerChecked(currentPlayer);
     }
 
-    @Override
-    public boolean isGameOver() {
-        return false;
-    }
 
-    @Override
     public Player getCurrentPlayer() {
         return this.currentPlayer;
     }
 
-    @Override
     public void addListener(PropertyChangeListener listener) {
         this.pcs.addPropertyChangeListener(listener);
     }
 
-    @Override
     public void removeListener(PropertyChangeListener listener) {
         this.pcs.removePropertyChangeListener(listener);
     }
@@ -311,4 +318,15 @@ public class Board implements IBoard {
         }
     }
 
+    public GameStatus checkGameStatus() {
+        boolean hasMoves = hasAnyLegalMove(currentPlayer);
+        if (!hasMoves) {
+            if (isCurrentPlayerChecked()) {
+                return GameStatus.CHECKMATE;
+            } else {
+                return GameStatus.STALEMATE;
+            }
+        }
+        return GameStatus.ACTIVE;
+    }
 }

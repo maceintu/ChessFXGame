@@ -1,10 +1,9 @@
 package fr.perso.chess.controller;
 
-import fr.perso.chess.model.general.Board;
-import fr.perso.chess.model.general.Cell;
-import fr.perso.chess.model.general.Position;
+import fr.perso.chess.model.general.*;
 import fr.perso.chess.model.pieces.Piece;
 import fr.perso.chess.view.BoardView;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button; // N'oublie pas l'import
 
 import java.util.List;
@@ -42,11 +41,35 @@ public class LocalMatchController {
             if (piece != null && piece.getColor().equals(board.getCurrentPlayer().getColor())) {
                 selectedPosition = clickedPosition;
                 possibleMoves = board.getLegalMoves(piece, clickedPosition);
-                boardView.showPossibleMoves(possibleMoves);}
+                boardView.showPossibleMoves(possibleMoves);
+            }
         } else {
             boolean moveDone = board.movePiece(selectedPosition, clickedPosition);
             boardView.clearPossibleMoves(possibleMoves);
             selectedPosition = null;
+            if (moveDone) {
+                checkAndHandleGameEnd();
+            }
         }
+    }
+
+    private void checkAndHandleGameEnd() {
+        GameStatus status = board.checkGameStatus();
+
+        if (status != GameStatus.ACTIVE) {
+            showGameOverPopup(status);
+        }
+    }
+
+    private void showGameOverPopup(GameStatus status) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("End of game");
+        alert.setHeaderText(null);
+        switch (status) {
+            case CHECKMATE -> alert.setContentText("Check mate,  " + (board.getCurrentPlayer().getColor().equals(PlayerColor.WHITE) ? "Black" : "White") + " Wins.");
+            case STALEMATE -> alert.setContentText("Draw : Stale Mate");
+            case DRAW_FIFTY_MOVES -> alert.setContentText("Draw : 50 coups");
+        }
+        alert.showAndWait();
     }
 }
